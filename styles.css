@@ -1,106 +1,125 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap');
 
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f0f2f5;
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f2f2f2;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    color: #333;
 }
 
 .container {
-    background: #fff;
+    background: #ffffff;
     padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     width: 100%;
-    max-width: 900px;
-    overflow: hidden;
+    max-width: 1200px;
+    box-sizing: border-box;
 }
 
 header {
-    margin-bottom: 30px;
     text-align: center;
+    margin-bottom: 40px;
 }
 
 h1 {
-    color: #34495e;
-    font-size: 2.5em;
+    color: #2c3e50;
+    font-size: 3em;
     font-weight: 700;
     margin: 0;
     padding: 0;
+    font-family: 'Playfair Display', serif;
+}
+
+p {
+    color: #7f8c8d;
+    font-size: 1.2em;
+    margin: 10px 0;
 }
 
 .category {
     margin-bottom: 30px;
-    padding: 20px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #ffffff 0%, #e9eff1 100%);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    transition: background 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .category:hover {
-    background: linear-gradient(135deg, #ffffff 0%, #d4e1e6 100%);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    transform: translateY(-5px);
 }
 
-.category-title {
-    color: #2980b9;
-    font-size: 1.7em;
+.category-header {
+    background: #2980b9;
+    color: #ffffff;
+    padding: 25px;
     cursor: pointer;
-    margin: 0;
-    padding: 10px;
+    font-size: 1.8em;
     font-weight: 600;
-    border-bottom: 2px solid #2980b9;
-    transition: color 0.3s ease, border-color 0.3s ease;
+    border-bottom: 2px solid #1f6394;
+    position: relative;
+    transition: background-color 0.3s ease;
+    text-align: center;
 }
 
-.category-title:hover {
-    color: #1f2a38;
-    border-color: #1f2a38;
+.category-header:hover {
+    background-color: #1f6394;
+}
+
+.category-header::after {
+    content: '▼';
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 1.4em;
+    transition: transform 0.3s ease;
 }
 
 .category-content {
     display: none;
-    padding: 10px 0;
-    animation: fadeIn 0.3s ease;
+    padding: 20px;
+    background: #ecf0f1;
+}
+
+.category-content .button-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centrează butoanele pe axa orizontală */
+    align-items: center; /* Centrează butoanele pe axa verticală */
+    gap: 20px; /* Spațiu între butoane */
 }
 
 .category-content a {
     text-decoration: none;
-    color: #3498db;
+    color: #ffffff;
+    background-color: #e67e22;
     font-weight: 500;
-    font-size: 1.1em;
-    transition: color 0.3s ease, background-color 0.3s ease;
-    padding: 8px 14px;
-    background-color: #ffffff;
-    border: 1px solid #dfe6e9;
-    border-radius: 6px;
+    font-size: 1.2em;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    padding: 15px 20px;
+    border-radius: 25px;
     display: inline-block;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 10px; /* Spațiu între butoane */
+    text-align: center;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    border: 2px solid transparent;
 }
 
 .category-content a:hover {
-    color: #1f3a6b;
-    background-color: #f1f1f1;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background-color: #d35400;
+    transform: translateY(-3px);
+    border-color: #c0392b;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+.category-title {
+    margin: 20px;
 }
 
 @media (max-width: 600px) {
@@ -112,12 +131,13 @@ h1 {
         font-size: 2em;
     }
 
-    .category-title {
-        font-size: 1.4em;
+    .category-header {
+        font-size: 1.5em;
     }
 
     .category-content a {
         font-size: 1em;
-        padding: 6px 12px;
+        padding: 10px 15px;
+        margin: 10px; /* Spațiu mai mic pe versiuni mobile */
     }
 }
