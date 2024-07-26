@@ -1,10 +1,10 @@
-/* Stiluri existente */
+/* Stiluri globale */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap');
 
 body {
     font-family: 'Open Sans', sans-serif;
-    background-color: #f2f2f2;
+    background: linear-gradient(to right, #e0f7fa, #b2ebf2); /* Gradient de la cyan deschis la albastru deschis */
     margin: 0;
     padding: 0;
     display: flex;
@@ -14,22 +14,23 @@ body {
 }
 
 .container {
-    background: #ffffff;
+    background: #ffffff; /* Alb simplu */
     padding: 30px;
     border-radius: 15px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Umbra mai subtilă */
     width: 100%;
     max-width: 800px;
     box-sizing: border-box;
 }
 
+/* Stiluri pentru header */
 header {
     text-align: center;
     margin-bottom: 30px;
 }
 
 h1 {
-    color: #2c3e50;
+    color: #37474f; /* Gri-albastru închis pentru contrast */
     font-size: 2.5em;
     font-weight: 700;
     margin: 0;
@@ -37,121 +38,70 @@ h1 {
     font-family: 'Playfair Display', serif;
 }
 
-p {
-    color: #7f8c8d;
-    font-size: 1em;
-    margin: 10px 0;
-}
-
+/* Stiluri pentru butoane */
 .button-container {
+    display: flex;
+    flex-direction: column; /* Aranjează butoanele vertical */
+    align-items: center; /* Centrează butoanele pe axa orizontală */
     margin: 20px 0;
-    text-align: center;
 }
 
 .button-container a {
     text-decoration: none;
     color: #ffffff;
-    background-color: #e67e22;
+    background-color: #00796b; /* Verde-turcoaz închis */
     font-weight: 500;
     font-size: 0.8em; /* Dimensiune mai mică pentru text */
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    padding: 10px 20px; /* Padding mai mic */
-    border-radius: 15px; /* Colțuri mai rotunjite */
-    display: inline-block;
+    padding: 10px 15px; /* Padding mai mic */
+    border-radius: 10px; /* Colțuri rotunjite */
+    display: block;
     text-align: center;
-    width: auto; /* Lățime automată pentru buton */
-    max-width: 300px; /* Lățime maximă pentru buton */
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    border: 2px solid transparent;
-}
-
-.button-container a:hover {
-    background-color: #d35400;
-    transform: translateY(-2px);
-    border-color: #c0392b;
+    width: 100%; /* Asigură că butoanele se întind pe toată lățimea containerului */
+    max-width: 200px; /* Lățime maximă pentru butoane */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Umbra mai subtilă */
+    margin: 8px 0; /* Spațiu între butoane */
 }
 
 /* Stiluri pentru secțiunile de categorie */
 .category {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     border-radius: 10px;
     overflow: hidden;
-    background: #ffffff;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.category:hover {
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
-    transform: translateY(-3px);
+    background: #ffffff; /* Alb simplu */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Umbra subtilă */
+    transition: none; /* Elimină efectele de hover */
 }
 
 .category-header {
-    background: #3498db;
+    background: #00796b; /* Verde-turcoaz închis */
     color: #ffffff;
     padding: 20px;
     cursor: pointer;
     font-size: 1.5em;
     font-weight: 600;
-    border-bottom: 2px solid #2980b9;
+    border-bottom: 2px solid #004d40; /* Verde-turcoaz mai închis */
     position: relative;
-    transition: background-color 0.3s ease;
     text-align: center;
 }
 
-.category-header:hover {
-    background-color: #2980b9;
-}
-
-.category-header::after {
-    content: '▼';
-    position: absolute;
-    right: 20px;
-    top: 15px;
-    font-size: 1.2em;
-    transition: transform 0.3s ease;
-}
-
-.category-title
-{
-    margin: 20px;
-    font-size: 1.0em;
-}
-
 .category-content {
-    display: none;
+    display: none; /* Ascunde conținutul inițial */
     padding: 15px;
-    background: #ecf0f1;
-}
-
-.category-content .button-container {
-    display: flex;
-    flex-direction: column; /* Aranjează butoanele vertical */
-    align-items: center; /* Centrează butoanele pe axa orizontală */
-   
+    background: #e0f2f1; /* Verde-turcoaz foarte deschis */
 }
 
 .category-content a {
     text-decoration: none;
     color: #ffffff;
-    background-color: #e67e22;
+    background-color: #00796b; /* Verde-turcoaz închis */
     font-weight: 500;
-    margin-left: 5px;
-    margin-right: 5px;
     font-size: 0.7em; /* Dimensiune mai mică pentru text */
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    padding: 6px 6px; /* Padding mai mic */
-    border-radius: 15px; /* Colțuri mai rotunjite */
+    padding: 8px 15px; /* Padding mai mic */
+    border-radius: 10px; /* Colțuri rotunjite */
     display: block;
     text-align: center;
     width: 100%; /* Asigură că butoanele se întind pe toată lățimea containerului */
-    max-width: 200px; /* Lățime maximă pentru butoane mai mică */
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    border: 2px solid transparent;
-}
-
-.category-content a:hover {
-    background-color: #d35400;
-    transform: translateY(-2px);
-    border-color: #c0392b;
+    max-width: 180px; /* Lățime maximă pentru butoane mai mică */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Umbra subtilă */
+    margin: 8px 0; /* Spațiu între butoane */
 }
