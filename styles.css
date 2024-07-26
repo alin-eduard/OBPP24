@@ -1,3 +1,4 @@
+/* Stiluri existente */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap');
 
@@ -14,22 +15,22 @@ body {
 
 .container {
     background: #ffffff;
-    padding: 40px;
-    border-radius: 20px;
+    padding: 30px;
+    border-radius: 15px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     width: 100%;
-    max-width: 1200px;
+    max-width: 800px;
     box-sizing: border-box;
 }
 
 header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 h1 {
     color: #2c3e50;
-    font-size: 3em;
+    font-size: 2.5em;
     font-weight: 700;
     margin: 0;
     padding: 0;
@@ -38,62 +39,96 @@ h1 {
 
 p {
     color: #7f8c8d;
-    font-size: 1.2em;
+    font-size: 1em;
     margin: 10px 0;
 }
 
+.button-container {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.button-container a {
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #e67e22;
+    font-weight: 500;
+    font-size: 0.8em; /* Dimensiune mai mică pentru text */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    padding: 10px 20px; /* Padding mai mic */
+    border-radius: 15px; /* Colțuri mai rotunjite */
+    display: inline-block;
+    text-align: center;
+    width: auto; /* Lățime automată pentru buton */
+    max-width: 300px; /* Lățime maximă pentru buton */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid transparent;
+}
+
+.button-container a:hover {
+    background-color: #d35400;
+    transform: translateY(-2px);
+    border-color: #c0392b;
+}
+
+/* Stiluri pentru secțiunile de categorie */
 .category {
-    margin-bottom: 30px;
-    border-radius: 20px;
+    margin-bottom: 10px;
+    border-radius: 10px;
     overflow: hidden;
     background: #ffffff;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .category:hover {
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+    transform: translateY(-3px);
 }
 
 .category-header {
-    background: #2980b9;
+    background: #3498db;
     color: #ffffff;
-    padding: 25px;
+    padding: 20px;
     cursor: pointer;
-    font-size: 1.8em;
+    font-size: 1.5em;
     font-weight: 600;
-    border-bottom: 2px solid #1f6394;
+    border-bottom: 2px solid #2980b9;
     position: relative;
     transition: background-color 0.3s ease;
     text-align: center;
 }
 
 .category-header:hover {
-    background-color: #1f6394;
+    background-color: #2980b9;
 }
 
 .category-header::after {
     content: '▼';
     position: absolute;
     right: 20px;
-    top: 20px;
-    font-size: 1.4em;
+    top: 15px;
+    font-size: 1.2em;
     transition: transform 0.3s ease;
+}
+
+.category-title
+{
+    margin: 20px;
+    font-size: 1.0em;
 }
 
 .category-content {
     display: none;
-    padding: 20px;
+    padding: 15px;
     background: #ecf0f1;
 }
 
 .category-content .button-container {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* Centrează butoanele pe axa orizontală */
-    align-items: center; /* Centrează butoanele pe axa verticală */
-    gap: 20px; /* Spațiu între butoane */
+    flex-direction: column; /* Aranjează butoanele vertical */
+    align-items: center; /* Centrează butoanele pe axa orizontală */
+   
 }
 
 .category-content a {
@@ -101,43 +136,22 @@ p {
     color: #ffffff;
     background-color: #e67e22;
     font-weight: 500;
-    font-size: 1.2em;
+    margin-left: 5px;
+    margin-right: 5px;
+    font-size: 0.7em; /* Dimensiune mai mică pentru text */
     transition: background-color 0.3s ease, transform 0.3s ease;
-    padding: 15px 20px;
-    border-radius: 25px;
-    display: inline-block;
-    margin: 10px; /* Spațiu între butoane */
+    padding: 6px 6px; /* Padding mai mic */
+    border-radius: 15px; /* Colțuri mai rotunjite */
+    display: block;
     text-align: center;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Asigură că butoanele se întind pe toată lățimea containerului */
+    max-width: 200px; /* Lățime maximă pentru butoane mai mică */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
     border: 2px solid transparent;
 }
 
 .category-content a:hover {
     background-color: #d35400;
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     border-color: #c0392b;
-}
-
-.category-title {
-    margin: 20px;
-}
-
-@media (max-width: 600px) {
-    .container {
-        padding: 20px;
-    }
-
-    h1 {
-        font-size: 2em;
-    }
-
-    .category-header {
-        font-size: 1.5em;
-    }
-
-    .category-content a {
-        font-size: 1em;
-        padding: 10px 15px;
-        margin: 10px; /* Spațiu mai mic pe versiuni mobile */
-    }
 }
