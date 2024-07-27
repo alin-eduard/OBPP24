@@ -4,7 +4,7 @@
 
 body {
     font-family: 'Open Sans', sans-serif;
-    background: linear-gradient(to right, #e0f7fa, #b2ebf2); /* Gradient de la cyan deschis la albastru deschis */
+    background: linear-gradient(to right, #e0f0f0, #b2ebfd); /* Gradient de la cyan deschis la albastru deschis */
     margin: 0;
     padding: 0;
     display: flex;
@@ -109,6 +109,7 @@ h1 {
     max-width: 180px; /* Lățime maximă pentru butoane mai mică */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Umbra subtilă */
     margin-left: 5px;
+    text-decoration: underline;
     margin-right: 5px;
 }
 
@@ -132,4 +133,5 @@ h1 {
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Umbra subtilă */
     transition: background-color 0.3s ease, transform 0.3s ease;
+    text-decoration: underline;
 }
