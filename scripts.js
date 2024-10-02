@@ -42,6 +42,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     list.style.display = list.style.display === 'flex' ? 'none' : 'flex';
                 });
             });
+
+            const contentLastUpdate = document.getElementById('last-update');
+            contentLastUpdate.textContent = "Updated " + data.lastUpdate;
         })
         .catch(error => console.error('Eroare la încărcarea fișierului JSON:', error));
 });

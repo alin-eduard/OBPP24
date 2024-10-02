@@ -13,9 +13,19 @@ body {
     min-height: 100vh;
 }
 
+.last-update
+{
+     font-family: 'Open Sans', sans-serif;
+     text-align: center;
+     font-size: 0.5em;
+     font-style: italic;
+}
+
 .container {
     background: #ffffff; /* Alb simplu */
     padding: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Umbra mai subtilă */
     width: 100%;
@@ -100,7 +110,7 @@ h1 {
     color: #ffffff;
     background-color: #00796b; /* Verde-turcoaz închis */
     font-weight: 500;
-    font-size: 0.5em; /* Dimensiune și mai mică pentru text */
+    font-size: 0.6em; /* Dimensiune și mai mică pentru text */
     padding: 6px 12px; /* Padding mai mic */
     border-radius: 5px; /* Colțuri rotunjite */
     display: block;
