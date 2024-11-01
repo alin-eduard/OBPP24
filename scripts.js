@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded',
 
 async function generareDosar(instrument) {
     const mergedPdf = await PDFLib.PDFDocument.create();
-    mergedPdf.setTitle(instrument);
+    mergedPdf.setTitle(`Orchestra Bisericii Penticostale Plopeni - ${instrument}`);
 
     try {
         const response = await fetch('config.json');
@@ -152,7 +152,7 @@ async function generareDosar(instrument) {
 
 async function generareDosarComplet() {
     const mergedPdf = await PDFLib.PDFDocument.create();
-    mergedPdf.setTitle("Merged PDF"); // Schimbă titlul în funcție de necesitate
+    mergedPdf.setTitle("Orchestra Bisericii Penticostale Plopeni");
 
     try {
         const response = await fetch('config.json');
