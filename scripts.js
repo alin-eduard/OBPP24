@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async function () {
+document.addEventListener('DOMContentLoaded', async function() {
     console.log('Script loaded'); // Confirmăm că scriptul a fost încărcat
 
     fetch('config.json')
@@ -47,32 +47,46 @@ document.addEventListener('DOMContentLoaded', async function () {
                 list.appendChild(mergeLink);
 
                 // Adăugăm funcționalitatea de combinare la apăsarea pe "All"
-                mergeLink.addEventListener('click', async function (e) {
+                mergeLink.addEventListener('click', async function(e) {
                     e.preventDefault();
-                    
+
                     const mergedPdf = await PDFLib.PDFDocument.create();
-                     mergedPdf.setTitle(cantare);
+                    mergedPdf.setTitle(cantare);
 
                     // Încărcăm și combinăm PDF-urile
                     for (const instrument of instrumente) {
                         const folder = instrument.toLowerCase().replace(' ', '');
                         const pdfUrl = `resources/${folder}/${cantare}.pdf`;
-                        
-                        const existingPdfBytes = await fetch(pdfUrl).then(res => res.arrayBuffer());
-                        const pdf = await PDFLib.PDFDocument.load(existingPdfBytes);
-                        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-                        copiedPages.forEach(page => mergedPdf.addPage(page));
+
+                        try {
+                            // Fetch cu verificarea existenței fișierului
+                            const response = await fetch(pdfUrl);
+
+                            if (!response.ok) {
+                                console.warn(`Fișierul nu a fost găsit la: ${pdfUrl}`);
+                                continue;
+                            }
+
+                            // Dacă fișierul există, preluăm și combinăm PDF-urile
+                            const existingPdfBytes = await response.arrayBuffer();
+                            const pdf = await PDFLib.PDFDocument.load(existingPdfBytes);
+                            const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+
+                            copiedPages.forEach(page => mergedPdf.addPage(page));
+                        } catch (error) {}
                     }
 
                     // Salvăm și deschidem PDF-ul combinat
                     const mergedPdfBytes = await mergedPdf.save();
-                    const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+                    const blob = new Blob([mergedPdfBytes], {
+                        type: 'application/pdf'
+                    });
                     const blobUrl = URL.createObjectURL(blob);
                     window.open(blobUrl); // Deschidem PDF-ul combinat într-o pagină nouă
                 });
 
                 // Toggle pentru a afișa/ascunde lista de instrumente
-                title.addEventListener('click', function () {
+                title.addEventListener('click', function() {
                     list.style.display = list.style.display === 'flex' ? 'none' : 'flex';
                 });
             });

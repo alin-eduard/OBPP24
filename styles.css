@@ -23,7 +23,7 @@ body {
 
 .container {
     background: #ffffff; /* Alb simplu */
-    padding: 20px;
+    padding: 10px;
     margin: 10px;
     border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Umbra mai subtilă */
@@ -100,7 +100,7 @@ h1 {
 
 .category-content {
     display: none; /* Ascunde conținutul inițial */
-    padding: 15px;
+    padding: 10px;
     background: #e0f2f1; /* Verde-turcoaz foarte deschis */
 }
 
