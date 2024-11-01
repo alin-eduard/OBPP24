@@ -35,7 +35,7 @@ body {
 /* Stiluri pentru header */
 header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 h1 {
@@ -100,7 +100,7 @@ h1 {
 
 .category-content {
     display: none; /* Ascunde conținutul inițial */
-    padding: 10px;
+    padding: 5px;
     background: #e0f2f1; /* Verde-turcoaz foarte deschis */
 }
 
@@ -109,35 +109,38 @@ h1 {
     color: #ffffff;
     background-color: #00796b; /* Verde-turcoaz închis */
     font-weight: 500;
-    font-size: 0.5em; /* Dimensiune și mai mică pentru text */
-    padding: 6px 12px; /* Padding mai mic */
-    border-radius: 5px; /* Colțuri rotunjite */
+    font-size: 0.65em; /* Mărimea textului ajustată pentru a fi mai mare */
+    padding: 8px 12px; /* Padding mai mic pentru un aspect mai compact */
+    border-radius: 15px; /* Colțuri rotunjite */
     display: block;
     text-align: center;
     width: 100%; /* Asigură că butoanele se întind pe toată lățimea containerului */
     max-width: 180px; /* Lățime maximă pentru butoane mai mică */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Umbra subtilă */
-    margin-left: 5px;
-    text-decoration: underline;
-    margin-right: 5px;
+    margin: 5px; /* Centrarea butoanelor cu margine automată pe lateral */
 }
 
 
 /* Stiluri pentru butonul de cuprins */
 .pdf-button-container {
-    text-align: center;
-    margin-bottom: 20px; /* Spațiu sub butonul cuprins */
+    display: flex; /* Folosește flexbox pentru a alinia butoanele */
+    flex-direction: column; /* Așezarea butoanelor pe verticală */
+    align-items: center; /* Centrarea butoanelor pe axa orizontală */
+    margin: 10px; /* Margine exterioară pentru container */
+    margin-top: 0px;
 }
 
 .pdf-button {
+    all: unset; 
     text-decoration: none;
     color: #ffffff;
+    margin: 4px; /* Margine verticală între butoane */
     background-color: #00796b; /* Portocaliu închis pentru contrast */
     font-weight: 500;
     width: 75%;
     font-size: 0.9em; /* Dimensiune text medie */
-    padding: 5px 5px; /* Padding moderat */
-    border-radius: 5px; /* Colțuri rotunjite */
+    padding: 10px; /* Padding moderat */
+    border-radius: 15px; /* Colțuri rotunjite */
     display: inline-block;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Umbra subtilă */
