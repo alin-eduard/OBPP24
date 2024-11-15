@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orchestra Bisericii Penticostale Plopeni</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="images/favicon.png" type="image/x-icon">
 </head>
 <body>
     <div class="container">
@@ -15,13 +16,19 @@
         <div>
             <div class="pdf-button-container">
                 <a href="resources/cuprins/Cuprins Orchestra.pdf" target="_blank" class="pdf-button">Cuprins</a>
-                <hr>
+                <button onclick="generareDosar('Mandolina')" class="pdf-button">Mandolină</button>
+                <button onclick="generareDosar('Vioara1')" class="pdf-button">Vioară 1</button>
+                <button onclick="generareDosar('Vioara2')" class="pdf-button">Vioară 2</button>
+                <button onclick="generareDosar('Chitara')" class="pdf-button">Chitară / Acordeon / Pian</button>
+                <button onclick="generareDosarComplet()" class="pdf-button">Dirijor</button>
             </div>
+            <hr>
         <main id="content">
             <!-- Conținutul dinamic va fi inserat aici -->
         </main>
         <hr>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
     <script src="scripts.js"></script>
     <div class = "last-update" id = "last-update"></div>
 </body>
