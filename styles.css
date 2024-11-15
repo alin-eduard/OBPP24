@@ -17,7 +17,7 @@ body {
 {
      font-family: 'Open Sans', sans-serif;
      text-align: center;
-     font-size: 0.5em;
+     font-size: 0.7em;
      font-style: italic;
 }
 
@@ -109,8 +109,8 @@ h1 {
     color: #ffffff;
     background-color: #00796b; /* Verde-turcoaz închis */
     font-weight: 500;
-    font-size: 0.65em; /* Mărimea textului ajustată pentru a fi mai mare */
-    padding: 8px 12px; /* Padding mai mic pentru un aspect mai compact */
+    font-size: 0.7em; /* Mărimea textului ajustată pentru a fi mai mare */
+    padding: 9px 0px; /* Padding mai mic pentru un aspect mai compact */
     border-radius: 15px; /* Colțuri rotunjite */
     display: block;
     text-align: center;
