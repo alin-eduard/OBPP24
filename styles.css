@@ -1,0 +1,148 @@
+/* Stiluri globale */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap');
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background: linear-gradient(to right, #e0f0f0, #b2ebfd); /* Gradient de la cyan deschis la albastru deschis */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.last-update
+{
+     font-family: 'Open Sans', sans-serif;
+     text-align: center;
+     font-size: 0.7em;
+     font-style: italic;
+}
+
+.container {
+    background: #ffffff; /* Alb simplu */
+    padding: 10px;
+    margin: 10px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Umbra mai subtilă */
+    width: 100%;
+    max-width: 800px;
+    box-sizing: border-box;
+}
+
+/* Stiluri pentru header */
+header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+h1 {
+    color: #37474f; /* Gri-albastru închis pentru contrast */
+    font-size: 2.5em;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    font-family: 'Playfair Display', serif;
+}
+
+/* Stiluri pentru butoane instrumente */
+.instrument-buttons {
+    display: flex;
+    flex-direction: column; /* Aranjează butoanele vertical */
+    align-items: center; /* Centrează butoanele pe axa orizontală */
+    gap: 10px; /* Spațiu între butoane */
+}
+
+.category-title
+{
+    font-size: 1.0em;
+    margin-left: 10px ;
+}
+
+.instrument-buttons a {
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #00796b; /* Verde-turcoaz închis */
+    font-weight: 500;
+    font-size: 0.7em; /* Dimensiune mai mică pentru text */
+    padding: 8px 12px; /* Padding mai mic */
+    border-radius: 10px; /* Colțuri rotunjite */
+    display: block;
+    text-align: center;
+    width: 100%; /* Asigură că butoanele se întind pe toată lățimea containerului */
+    max-width: 200px; /* Lățime maximă pentru butoane */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Umbra mai subtilă */
+}
+
+/* Stiluri pentru secțiunile de categorie */
+.category {
+    margin-bottom: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #ffffff; /* Alb simplu */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Umbra subtilă */
+    transition: none; /* Elimină efectele de hover */
+}
+
+.category-header {
+    background: #00796b; /* Verde-turcoaz închis */
+    color: #ffffff;
+    padding: 20px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 600;
+    border-bottom: 2px solid #004d40; /* Verde-turcoaz mai închis */
+    position: relative;
+    text-align: center;
+}
+
+.category-content {
+    display: none; /* Ascunde conținutul inițial */
+    padding: 5px;
+    background: #e0f2f1; /* Verde-turcoaz foarte deschis */
+}
+
+.category-content a {
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #00796b; /* Verde-turcoaz închis */
+    font-weight: 500;
+    font-size: 0.7em; /* Mărimea textului ajustată pentru a fi mai mare */
+    padding: 9px 0px; /* Padding mai mic pentru un aspect mai compact */
+    border-radius: 15px; /* Colțuri rotunjite */
+    display: block;
+    text-align: center;
+    width: 100%; /* Asigură că butoanele se întind pe toată lățimea containerului */
+    max-width: 180px; /* Lățime maximă pentru butoane mai mică */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Umbra subtilă */
+    margin: 5px; /* Centrarea butoanelor cu margine automată pe lateral */
+}
+
+
+/* Stiluri pentru butonul de cuprins */
+.pdf-button-container {
+    display: flex; /* Folosește flexbox pentru a alinia butoanele */
+    flex-direction: column; /* Așezarea butoanelor pe verticală */
+    align-items: center; /* Centrarea butoanelor pe axa orizontală */
+    margin: 10px; /* Margine exterioară pentru container */
+    margin-top: 0px;
+}
+
+.pdf-button {
+    all: unset; 
+    text-decoration: none;
+    color: #ffffff;
+    margin: 4px; /* Margine verticală între butoane */
+    background-color: #00796b; /* Portocaliu închis pentru contrast */
+    font-weight: 500;
+    width: 75%;
+    font-size: 0.9em; /* Dimensiune text medie */
+    padding: 10px; /* Padding moderat */
+    border-radius: 15px; /* Colțuri rotunjite */
+    display: inline-block;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Umbra subtilă */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
