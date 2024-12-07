@@ -7,29 +7,30 @@ body {
     background: linear-gradient(to right, #e0f0f0, #b2ebfd); /* Gradient de la cyan deschis la albastru deschis */
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block; /* Schimbăm de la flex la block pentru a opri centrul global */
     min-height: 100vh;
 }
 
-.last-update
-{
-     font-family: 'Open Sans', sans-serif;
-     text-align: center;
-     font-size: 0.7em;
-     font-style: italic;
+.last-update {
+    font-family: 'Open Sans', sans-serif;
+    text-align: center;
+    font-size: 0.7em;
+    font-style: italic;
 }
 
 .container {
     background: #ffffff; /* Alb simplu */
     padding: 10px;
-    margin: 10px;
+    margin: 10px 0; /* Margini doar pe sus și jos */
     border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Umbra mai subtilă */
     width: 100%;
     max-width: 800px;
     box-sizing: border-box;
+
+    /* Aliniază containerul pe orizontală */
+    margin-left: auto;  /* Centrare pe orizontală */
+    margin-right: auto; /* Centrare pe orizontală */
 }
 
 /* Stiluri pentru header */
@@ -55,8 +56,7 @@ h1 {
     gap: 10px; /* Spațiu între butoane */
 }
 
-.category-title
-{
+.category-title {
     font-size: 1.0em;
     margin-left: 10px ;
 }
@@ -117,7 +117,7 @@ h1 {
     width: 100%; /* Asigură că butoanele se întind pe toată lățimea containerului */
     max-width: 180px; /* Lățime maximă pentru butoane mai mică */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Umbra subtilă */
-    margin: 5px; /* Centrarea butoanelor cu margine automată pe lateral */
+    margin: 2px; /* Centrarea butoanelor cu margine automată pe lateral */
 }
 
 
@@ -145,4 +145,26 @@ h1 {
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Umbra subtilă */
     transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+#search-input {
+    width: 90%;
+    max-width: 400px;
+    padding: 10px;
+    border: 2px solid #00796b;
+    border-radius: 15px;
+    font-size: 1em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+#search-input:focus {
+    border-color: #004d40;
 }

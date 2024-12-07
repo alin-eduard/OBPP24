@@ -100,7 +100,20 @@ document.addEventListener('DOMContentLoaded',
             .catch(error => console.error('Eroare la încărcarea fișierului JSON:', error));
     });
 
+function filtrareCantari() {
+    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+    const categories = document.querySelectorAll('.category');
 
+    categories.forEach(category => {
+        const title = category.querySelector('.category-title').textContent.toLowerCase();
+
+        if (title.includes(searchTerm)) {
+            category.style.display = 'block';
+        } else {
+            category.style.display = 'none';
+        }
+    });
+}
 
 async function generareDosar(instrument) {
     const mergedPdf = await PDFLib.PDFDocument.create();
