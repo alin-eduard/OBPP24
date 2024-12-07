@@ -7,11 +7,12 @@ document.addEventListener('DOMContentLoaded', async function() {
             throw new Error('Eroare la încărcarea fișierului JSON');
         }
         const data = await response.json();
-        console.log('JSON data:', data); // Verificăm dacă datele sunt încărcate corect
+        console.log('JSON data:', data);
 
         const content = document.getElementById('content');
         const instrumente = ['Mandolina', 'Vioara 1', 'Vioara 2', 'Chitara'];
 
+        // Adăugăm secțiuni pentru fiecare cântare
         data.cantari.forEach(cantare => {
             const section = document.createElement('section');
             section.classList.add('category');
@@ -28,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             mergeLink.href = '#';
             mergeLink.classList.add('merge-link');
 
-            // Adăugăm linkuri individuale pentru fiecare instrument
+            // Adăugăm linkuri pentru fiecare instrument
             instrumente.forEach(instrument => {
                 const folder = instrument.toLowerCase().replace(' ', '');
                 const link = document.createElement('a');
@@ -44,34 +45,45 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             list.appendChild(mergeLink);
 
-            // Adăugăm funcționalitatea de combinare la apăsarea pe "All"
+            // Funcționalitatea de combinare PDF
             mergeLink.addEventListener('click', async function(e) {
                 e.preventDefault();
 
                 const mergedPdf = await PDFLib.PDFDocument.create();
                 mergedPdf.setTitle(cantare);
 
-                const pdfPromises = instrumente.map(async (instrument) => {
+                // Creăm un array de Promises pentru fiecare instrument
+                const pdfPromises = instrumente.map(instrument => {
                     const folder = instrument.toLowerCase().replace(' ', '');
                     const pdfUrl = `resources/${folder}/${cantare}.pdf`;
 
-                    try {
-                        const response = await fetch(pdfUrl);
-                        if (!response.ok) {
-                            console.warn(`Fișierul nu a fost găsit la: ${pdfUrl}`);
-                            return null;  // Returnăm null dacă fișierul nu există
-                        }
-                        const pdfBytes = await response.arrayBuffer();
-                        const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
-                        const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
-
-                        copiedPages.forEach(page => mergedPdf.addPage(page));
-                    } catch (error) {
-                        console.error(`Eroare la procesarea fișierului PDF: ${error}`);
-                    }
+                    return fetch(pdfUrl)
+                        .then(response => {
+                            if (!response.ok) {
+                                console.warn(`Fișierul nu a fost găsit la: ${pdfUrl}`);
+                                return null;
+                            }
+                            return response.arrayBuffer();
+                        })
+                        .then(pdfBytes => {
+                            if (pdfBytes) {
+                                return PDFLib.PDFDocument.load(pdfBytes);
+                            }
+                        })
+                        .then(pdfDoc => {
+                            if (pdfDoc) {
+                                return mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+                            }
+                        })
+                        .then(copiedPages => {
+                            if (copiedPages) {
+                                copiedPages.forEach(page => mergedPdf.addPage(page));
+                            }
+                        })
+                        .catch(error => console.error(`Eroare la procesarea fișierului PDF: ${error}`));
                 });
 
-                // Așteaptă ca toate fișierele să fie procesate
+                // Așteptăm toate Promises
                 await Promise.all(pdfPromises);
 
                 // Salvăm și deschidem PDF-ul combinat
@@ -95,6 +107,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 });
 
+// Funcția pentru a căuta cântările
 function filtrareCantari() {
     const searchTerm = document.getElementById('search-input').value.toLowerCase();
     const categories = document.querySelectorAll('.category');
@@ -110,9 +123,10 @@ function filtrareCantari() {
     });
 }
 
-async function generareDosar(instrument) {
+// Funcția pentru generarea dosarului complet pentru o listă de instrumente
+async function generareDosarComplet(instrumente) {
     const mergedPdf = await PDFLib.PDFDocument.create();
-    mergedPdf.setTitle(`Orchestra Bisericii Penticostale Plopeni - ${instrument}`);
+    mergedPdf.setTitle(`Dosar complet - Orchestra Bisericii Penticostale Plopeni`);
 
     try {
         const response = await fetch('config.json');
@@ -120,92 +134,50 @@ async function generareDosar(instrument) {
             throw new Error('Eroare la încărcarea fișierului JSON');
         }
 
-        const data = await response.json(); // Obține datele din JSON
+        const data = await response.json();
 
-        for (const cantare of data.cantari) { // Folosește for...of pentru a putea utiliza await
-            const folder = instrument.toLowerCase().replace(' ', '');
-            const pdfUrl = `resources/${folder}/${cantare}.pdf`;
-
-            try {
-                // Fetch cu verificarea existenței fișierului
-                const pdfResponse = await fetch(pdfUrl);
-
-                if (!pdfResponse.ok) {
-                    console.warn(`Fișierul nu a fost găsit la: ${pdfUrl}`);
-                    continue; // Treci la următoarea cântare dacă fișierul nu există
-                }
-
-                // Dacă fișierul există, preluăm și combinăm PDF-urile
-                const existingPdfBytes = await pdfResponse.arrayBuffer();
-                const pdf = await PDFLib.PDFDocument.load(existingPdfBytes);
-                const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-
-                copiedPages.forEach(page => mergedPdf.addPage(page));
-            } catch (error) {
-                console.error(`Eroare la preluarea fișierului PDF: ${error}`);
-            }
-        }
-
-        // Salvăm și deschidem PDF-ul combinat
-        const mergedPdfBytes = await mergedPdf.save();
-        const blob = new Blob([mergedPdfBytes], {
-            type: 'application/pdf'
-        });
-        const blobUrl = URL.createObjectURL(blob);
-        window.open(blobUrl); // Deschidem PDF-ul combinat într-o pagină nouă
-    } catch (error) {
-        console.error('Eroare la încărcarea fișierului JSON:', error);
-    }
-}
-
-// Funcția pentru generarea dosarului complet
-async function generareDosarComplet() {
-    const mergedPdf = await PDFLib.PDFDocument.create();
-    mergedPdf.setTitle("Orchestra Bisericii Penticostale Plopeni");
-
-    try {
-        const response = await fetch('config.json');
-        if (!response.ok) {
-            throw new Error('Eroare la încărcarea fișierului JSON');
-        }
-
-        const data = await response.json(); // Obține datele din JSON
-
-        const instrumente = ['Mandolina', 'Vioara 1', 'Vioara 2', 'Chitara']; // Definește instrumentele aici
-
-        for (const cantare of data.cantari) { // Folosește for...of pentru a putea utiliza await
-            for (const instrument of instrumente) { // Iterează prin instrumente
+        // Generăm promisiuni pentru fiecare cântare
+        const pdfPromises = data.cantari.map(cantare => {
+            // Pentru fiecare instrument din lista primită ca parametru
+            return instrumente.map(instrument => {
                 const folder = instrument.toLowerCase().replace(' ', '');
                 const pdfUrl = `resources/${folder}/${cantare}.pdf`;
 
-                try {
-                    // Fetch cu verificarea existenței fișierului
-                    const pdfResponse = await fetch(pdfUrl);
-
-                    if (!pdfResponse.ok) {
-                        console.warn(`Fișierul nu a fost găsit la: ${pdfUrl}`);
-                        continue; // Treci la următoarea cântare dacă fișierul nu există
-                    }
-
-                    // Dacă fișierul există, preluăm și combinăm PDF-urile
-                    const existingPdfBytes = await pdfResponse.arrayBuffer();
-                    const pdf = await PDFLib.PDFDocument.load(existingPdfBytes);
-                    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-
-                    copiedPages.forEach(page => mergedPdf.addPage(page));
-                } catch (error) {
-                    console.error(`Eroare la preluarea fișierului PDF: ${error}`);
-                }
-            }
-        }
-
-        // Salvăm și deschidem PDF-ul combinat
-        const mergedPdfBytes = await mergedPdf.save();
-        const blob = new Blob([mergedPdfBytes], {
-            type: 'application/pdf'
+                return fetch(pdfUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            console.warn(`Fișierul nu a fost găsit la: ${pdfUrl}`);
+                            return null;
+                        }
+                        return response.arrayBuffer();
+                    })
+                    .then(pdfBytes => {
+                        if (pdfBytes) {
+                            return PDFLib.PDFDocument.load(pdfBytes);
+                        }
+                    })
+                    .then(pdfDoc => {
+                        if (pdfDoc) {
+                            return mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+                        }
+                    })
+                    .then(copiedPages => {
+                        if (copiedPages) {
+                            copiedPages.forEach(page => mergedPdf.addPage(page));
+                        }
+                    })
+                    .catch(error => console.error(`Eroare la procesarea fișierului PDF: ${error}`));
+            });
         });
+
+        // Așteptăm toate promisiunile
+        await Promise.all(pdfPromises.flat());
+
+        // Salvăm și deschidem PDF-ul generat
+        const mergedPdfBytes = await mergedPdf.save();
+        const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
         const blobUrl = URL.createObjectURL(blob);
-        window.open(blobUrl); // Deschidem PDF-ul combinat într-o pagină nouă
+        window.open(blobUrl);
     } catch (error) {
         console.error('Eroare la încărcarea fișierului JSON:', error);
     }

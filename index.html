@@ -16,11 +16,11 @@
             <div>
                 <div class="pdf-button-container">
                     <a href="resources/cuprins/Cuprins Orchestra.pdf" target="_blank" class="pdf-button">Cuprins</a>
-                    <button onclick="generareDosar('Mandolina')" class="pdf-button">Mandolină</button>
-                    <button onclick="generareDosar('Vioara1')" class="pdf-button">Vioară 1</button>
-                    <button onclick="generareDosar('Vioara2')" class="pdf-button">Vioară 2</button>
-                    <button onclick="generareDosar('Chitara')" class="pdf-button">Chitară / Acordeon / Pian</button>
-                    <button onclick="generareDosarComplet()" class="pdf-button">Dirijor</button>
+                    <button onclick="generareDosarComplet(['Mandolina'])" class="pdf-button">Mandolină</button>
+                    <button onclick="generareDosarComplet(['Vioara 1'])" class="pdf-button">Vioară 1</button>
+                    <button onclick="generareDosarComplet(['Vioara 2'])" class="pdf-button">Vioară 2</button>
+                    <button onclick="generareDosarComplet(['Chitara'])" class="pdf-button">Chitară / Acordeon / Pian</button>
+                    <button onclick="generareDosarComplet(['Mandolina', 'Vioara 1', 'Vioara 2', 'Chitara'])" class="pdf-button">Dirijor</button>
                 </div>
                 <hr>
                 <div class="search-bar">
