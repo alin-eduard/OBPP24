@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     console.log('Script loaded'); // Confirmăm că scriptul a fost încărcat
 
     try {
-        const response = await fetch('config.json');
+        const response = await fetch('resources/config.json');
         if (!response.ok) {
             throw new Error('Eroare la încărcarea fișierului JSON');
         }
@@ -129,7 +129,7 @@ async function generareDosarComplet(instrumente) {
     mergedPdf.setTitle(`Dosar complet - Orchestra Bisericii Penticostale Plopeni`);
 
     try {
-        const response = await fetch('config.json');
+        const response = await fetch('resources/config.json');
         if (!response.ok) {
             throw new Error('Eroare la încărcarea fișierului JSON');
         }
