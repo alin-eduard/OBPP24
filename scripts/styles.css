@@ -1,10 +1,9 @@
 /* Stiluri globale */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
 body {
-    font-family: 'Open Sans', sans-serif;
     background: linear-gradient(to right, #e0f0f0, #b2ebfd); /* Gradient de la cyan deschis la albastru deschis */
+    font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
     display: block; /* Schimbăm de la flex la block pentru a opri centrul global */
@@ -12,7 +11,7 @@ body {
 }
 
 .last-update {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Poppins', sans-serif;
     text-align: center;
     font-size: 0.7em;
     font-style: italic;
@@ -40,12 +39,16 @@ header {
 }
 
 h1 {
-    color: #37474f; /* Gri-albastru închis pentru contrast */
     font-size: 2.5em;
     font-weight: 700;
     margin: 0;
     padding: 0;
-    font-family: 'Playfair Display', serif;
+    font-family: 'Poppins', sans-serif;
+}
+
+h2
+{
+    font-weight: 500;
 }
 
 /* Stiluri pentru butoane instrumente */
