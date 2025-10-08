@@ -1,53 +1,67 @@
-#!/usr/bin/env python3
-import sys
 import os
-import re
+import sys
+import json
 from PyPDF2 import PdfMerger
 
-def extract_leading_number(filename: str) -> int:
-    """Extract the leading number from filenames like '9. Title.pdf'."""
-    match = re.match(r"^\s*(\d+)", filename)
-    return int(match.group(1)) if match else float('inf')
-
-def concat_pdfs(input_dir: str, output_dir: str, output_file: str):
-    if not os.path.isdir(input_dir):
-        print(f"Error: input directory '{input_dir}' not found.")
-        sys.exit(1)
-
-    os.makedirs(output_dir, exist_ok=True)
-
-    pdf_files = [f for f in os.listdir(input_dir) if f.lower().endswith(".pdf")]
-    pdf_files.sort(key=extract_leading_number)  # ✅ Sort by the numeric prefix
-
-    if not pdf_files:
-        print("No PDF files found in input directory.")
-        sys.exit(1)
-
+def concat_pdfs(input_dir, output_dir, output_filename, json_path):
     merger = PdfMerger()
 
-    try:
-        for pdf in pdf_files:
-            path = os.path.join(input_dir, pdf)
-            print(f"Adding: {path}")
-            merger.append(path)
+    # Citim fișierul JSON cu ordinea dorită
+    with open(json_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+        ordered_titles = data.get("cantari", [])
 
-        output_path = os.path.join(output_dir, output_file)
-        merger.write(output_path)
-        merger.close()
-        print(f"✅ PDF successfully created: {output_path}")
+    # Creăm o mapare simplă între numele fișierului (fără extensie) și fișierul real
+    available_pdfs = {
+        os.path.splitext(f)[0].strip(): f
+        for f in os.listdir(input_dir)
+        if f.lower().endswith(".pdf")
+    }
 
-    except Exception as e:
-        print(f"Error during merge: {e}")
-        sys.exit(1)
+    missing = []  # pentru raportare la final
+
+    # Parcurgem lista din JSON, în ordinea dorită
+    for title in ordered_titles:
+        clean_title = title.strip()
+        pdf_name = available_pdfs.get(clean_title)
+        if pdf_name:
+            pdf_path = os.path.join(input_dir, pdf_name)
+            print(f"✅ Added: {pdf_name}")
+            merger.append(pdf_path)
+        else:
+            print(f"⚠️ Skipped (missing): {clean_title}")
+            missing.append(clean_title)
+
+    # Dacă nu a fost adăugat niciun fișier, ieșim
+    if not merger.pages:
+        print("❌ No valid PDFs found to merge. Exiting.")
+        return
+
+    # Creăm directorul de output dacă nu există
+    os.makedirs(output_dir, exist_ok=True)
+    output_path = os.path.join(output_dir, output_filename)
+
+    # Scriem rezultatul final
+    merger.write(output_path)
+    merger.close()
+
+    print(f"\n🎉 PDF created successfully → {output_path}")
+
+    # Raportăm fișierele lipsă, dacă există
+    if missing:
+        print("\n⚠️ The following files were missing and skipped:")
+        for m in missing:
+            print(f"   - {m}")
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
-        print("Usage: python concat_pdfs.py <input_dir> <output_dir> <output_file>")
+    if len(sys.argv) != 5:
+        print("Usage: python concat_pdfs.py <input_dir> <output_dir> <output_filename> <json_path>")
         sys.exit(1)
 
     input_dir = sys.argv[1]
     output_dir = sys.argv[2]
-    output_file = sys.argv[3]
+    output_filename = sys.argv[3]
+    json_path = sys.argv[4]
 
-    concat_pdfs(input_dir, output_dir, output_file)
+    concat_pdfs(input_dir, output_dir, output_filename, json_path)
