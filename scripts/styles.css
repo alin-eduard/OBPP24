@@ -1,173 +1,317 @@
-/* Stiluri globale */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+/* Clean Minimalist Design - Orchestra Bisericii Penticostale Plopeni */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-body {
-    background: linear-gradient(to right, #e0f0f0, #b2ebfd); /* Gradient de la cyan deschis la albastru deschis */
-    font-family: 'Poppins', sans-serif;
+/* CSS Variables for Color Palette */
+:root {
+    --primary-teal: #0F766E;
+    --primary-teal-light: #0D9488;
+    --primary-teal-dark: #115E59;
+    --secondary-green: #047857;
+    --secondary-green-light: #059669;
+    --accent-soft: #D1FAE5;
+    --accent-lighter: #ECFDF5;
+    --neutral-white: #FFFFFF;
+    --neutral-gray: #F9FAFB;
+    --text-dark: #064E3B;
+    --text-light: #6B7280;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.12);
+    --shadow-xl: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Global Styles */
+* {
     margin: 0;
     padding: 0;
-    display: block; /* Schimbăm de la flex la block pentru a opri centrul global */
-    min-height: 100vh;
+    box-sizing: border-box;
 }
 
-.last-update {
+body {
+    background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+    background-attachment: fixed;
     font-family: 'Poppins', sans-serif;
-    text-align: center;
-    font-size: 0.7em;
-    font-style: italic;
+    min-height: 100vh;
+    padding: 20px 10px;
+    position: relative;
+    overflow-x: hidden;
 }
 
+/* Container */
 .container {
-    background: #ffffff; /* Alb simplu */
-    padding: 10px;
-    margin: 10px 0; /* Margini doar pe sus și jos */
-    border-radius: 15px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Umbra mai subtilă */
+    position: relative;
+    background: rgba(30, 41, 59, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 30px 20px;
+    margin: 0 auto;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     width: 100%;
     max-width: 800px;
-    box-sizing: border-box;
-
-    /* Aliniază containerul pe orizontală */
-    margin-left: auto;  /* Centrare pe orizontală */
-    margin-right: auto; /* Centrare pe orizontală */
+    border: 1px solid rgba(94, 234, 212, 0.15);
+    z-index: 1;
 }
 
-/* Stiluri pentru header */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Header Styles */
 header {
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
+    position: relative;
 }
 
 h1 {
     font-size: 2.5em;
     font-weight: 700;
-    margin: 0;
-    padding: 0;
-    font-family: 'Poppins', sans-serif;
-}
-
-h2
-{
-    font-weight: 500;
-}
-
-/* Stiluri pentru butoane instrumente */
-.instrument-buttons {
-    display: flex;
-    flex-direction: column; /* Aranjează butoanele vertical */
-    align-items: center; /* Centrează butoanele pe axa orizontală */
-    gap: 10px; /* Spațiu între butoane */
-}
-
-.category-title {
-    font-size: 1.0em;
-    margin-left: 10px ;
-}
-
-.instrument-buttons a {
-    text-decoration: none;
-    color: #ffffff;
-    background-color: #00796b; /* Verde-turcoaz închis */
-    font-weight: 500;
-    font-size: 0.7em; /* Dimensiune mai mică pentru text */
-    padding: 8px 12px; /* Padding mai mic */
-    border-radius: 10px; /* Colțuri rotunjite */
-    display: block;
-    text-align: center;
-    width: 100%; /* Asigură că butoanele se întind pe toată lățimea containerului */
-    max-width: 200px; /* Lățime maximă pentru butoane */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Umbra mai subtilă */
-}
-
-/* Stiluri pentru secțiunile de categorie */
-.category {
+    color: #5EEAD4;
     margin-bottom: 10px;
-    border-radius: 10px;
-    overflow: hidden;
-    background: #ffffff; /* Alb simplu */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Umbra subtilă */
-    transition: none; /* Elimină efectele de hover */
+    line-height: 1.2;
 }
 
-.category-header {
-    background: #00796b; /* Verde-turcoaz închis */
-    color: #ffffff;
-    padding: 20px;
-    cursor: pointer;
-    font-size: 0.9em;
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h2 {
     font-weight: 600;
-    border-bottom: 2px solid #004d40; /* Verde-turcoaz mai închis */
-    position: relative;
-    text-align: center;
+    color: #94A3B8;
 }
 
-.category-content {
-    display: none; /* Ascunde conținutul inițial */
-    padding: 5px;
-    background: #e0f2f1; /* Verde-turcoaz foarte deschis */
+hr {
+    border: none;
+    height: 1px;
+    background: rgba(94, 234, 212, 0.15);
+    margin: 20px 0;
 }
 
-.category-content a {
-    text-decoration: none;
-    color: #ffffff;
-    background-color: #00796b; /* Verde-turcoaz închis */
-    font-weight: 500;
-    font-size: 0.7em; /* Mărimea textului ajustată pentru a fi mai mare */
-    padding: 9px 0px; /* Padding mai mic pentru un aspect mai compact */
-    border-radius: 15px; /* Colțuri rotunjite */
-    display: block;
-    text-align: center;
-    width: 100%; /* Asigură că butoanele se întind pe toată lățimea containerului */
-    max-width: 180px; /* Lățime maximă pentru butoane mai mică */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Umbra subtilă */
-    margin: 2px; /* Centrarea butoanelor cu margine automată pe lateral */
-}
-
-
-/* Stiluri pentru butonul de cuprins */
+/* PDF Button Container */
 .pdf-button-container {
-    display: flex; /* Folosește flexbox pentru a alinia butoanele */
-    flex-direction: column; /* Așezarea butoanelor pe verticală */
-    align-items: center; /* Centrarea butoanelor pe axa orizontală */
-    margin: 10px; /* Margine exterioară pentru container */
-    margin-top: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
 }
 
 .pdf-button {
-    all: unset; 
+    all: unset;
     text-decoration: none;
-    color: #ffffff;
-    margin: 4px; /* Margine verticală între butoane */
-    background-color: #00796b; /* Portocaliu închis pentru contrast */
-    font-weight: 500;
-    width: 75%;
-    font-size: 0.9em; /* Dimensiune text medie */
-    padding: 10px; /* Padding moderat */
-    border-radius: 15px; /* Colțuri rotunjite */
+    color: var(--neutral-white);
+    background: var(--primary-teal);
+    font-weight: 600;
+    font-size: 0.95em;
+    padding: 14px 32px;
+    border-radius: 12px;
     display: inline-block;
     text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Umbra subtilă */
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    width: 80%;
+    max-width: 300px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+    cursor: pointer;
 }
 
+
+
+.pdf-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    background: var(--primary-teal-light);
+}
+
+.pdf-button:active {
+    transform: translateY(0);
+}
+
+/* Search Bar */
 .search-bar {
     display: flex;
     justify-content: center;
-    margin: 10px 0;
+    margin: 20px 0;
 }
 
 #search-input {
     width: 90%;
-    max-width: 400px;
-    padding: 10px;
-    border: 2px solid #00796b;
-    border-radius: 15px;
+    max-width: 500px;
+    padding: 12px 18px;
+    border: 1px solid rgba(20, 184, 166, 0.25);
+    border-radius: 10px;
     font-size: 1em;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Poppins', sans-serif;
+    background: rgba(30, 41, 59, 0.6);
+    color: #CBD5E1;
+    box-shadow: var(--shadow-sm);
     outline: none;
-    transition: border-color 0.3s ease;
+    transition: all 0.2s ease;
+}
+
+#search-input::placeholder {
+    color: #64748B;
 }
 
 #search-input:focus {
-    border-color: #004d40;
+    border-color: #5EEAD4;
+    box-shadow: 0 0 0 3px rgba(94, 234, 212, 0.15);
+    background: rgba(30, 41, 59, 0.8);
+}
+
+/* Category Sections */
+.category {
+    margin-bottom: 14px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(30, 41, 59, 0.6);
+    box-shadow: var(--shadow-md);
+    transition: all 0.2s ease;
+    border: 1px solid rgba(94, 234, 212, 0.15);
+}
+
+.category:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(94, 234, 212, 0.2);
+    border-color: rgba(94, 234, 212, 0.3);
+}
+
+.category-title {
+    background: var(--primary-teal);
+    color: var(--neutral-white);
+    padding: 16px 20px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    text-align: center;
+    position: relative;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.category-title:hover {
+    background: var(--primary-teal-light);
+}
+
+.category-title::after {
+    content: '▼';
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.3s ease;
+    font-size: 0.8em;
+}
+
+.category-content {
+    display: none;
+    padding: 16px;
+    background: rgba(15, 23, 42, 0.6);
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.category-content a {
+    text-decoration: none;
+    color: var(--neutral-white);
+    background: var(--secondary-green);
+    font-weight: 500;
+    font-size: 0.85em;
+    padding: 10px 18px;
+    border-radius: 8px;
+    display: inline-block;
+    text-align: center;
+    min-width: 130px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+}
+
+
+
+.category-content a:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    background: var(--secondary-green-light);
+}
+
+.category-content a:active {
+    transform: translateY(0);
+}
+
+/* Special styling for "All" merge link */
+.merge-link {
+    background: var(--primary-teal) !important;
+    font-weight: 600 !important;
+}
+
+/* Last Update */
+.last-update {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    font-size: 0.75em;
+    font-style: italic;
+    color: #94A3B8;
+    margin-top: 30px;
+    padding: 10px;
+    opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2em;
+    }
+
+    .container {
+        padding: 20px 15px;
+        border-radius: 20px;
+    }
+
+    .pdf-button {
+        width: 90%;
+        font-size: 0.9em;
+        padding: 12px 24px;
+    }
+
+    #search-input {
+        width: 95%;
+        font-size: 0.95em;
+    }
+
+    .category-content a {
+        min-width: 120px;
+        font-size: 0.8em;
+        padding: 10px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.6em;
+    }
+
+    body {
+        padding: 10px 5px;
+    }
+
+    .container {
+        padding: 15px 10px;
+    }
 }
