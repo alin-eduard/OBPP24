@@ -1,173 +1,515 @@
-/* Stiluri globale */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+/* ==========================================================================
+   Orchestra BPP — stiluri
+   ========================================================================== */
 
-body {
-    background: linear-gradient(to right, #e0f0f0, #b2ebfd); /* Gradient de la cyan deschis la albastru deschis */
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    display: block; /* Schimbăm de la flex la block pentru a opri centrul global */
-    min-height: 100vh;
+:root {
+    --bg: #f6f1e7;
+    --bg-grad: #efe6d4;
+    --surface: #fffdf8;
+    --surface-2: #f9f4ea;
+    --ink: #1f1d1a;
+    --ink-2: #5c564c;
+    --ink-3: #8d8578;
+    --line: #e6dccb;
+    --line-strong: #d5c8b2;
+    --accent: #7a2e3a;        /* bordo */
+    --accent-ink: #ffffff;
+    --accent-soft: #f3e3e3;
+    --gold: #b0883f;
+    --focus: #b0883f;
+    --shadow-sm: 0 1px 2px rgba(60, 40, 20, .06);
+    --shadow: 0 1px 2px rgba(60, 40, 20, .05), 0 8px 24px -12px rgba(60, 40, 20, .18);
+    --radius: 14px;
+    --radius-sm: 10px;
+    --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    color-scheme: light;
 }
 
-.last-update {
-    font-family: 'Poppins', sans-serif;
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #14161b;
+        --bg-grad: #191c22;
+        --surface: #1d2027;
+        --surface-2: #23272f;
+        --ink: #f1ece2;
+        --ink-2: #b9b2a5;
+        --ink-3: #847d71;
+        --line: #2c3038;
+        --line-strong: #3a3f49;
+        --accent: #e0a0a9;
+        --accent-ink: #1a0e10;
+        --accent-soft: #3a252a;
+        --gold: #d6b26a;
+        --focus: #d6b26a;
+        --shadow-sm: none;
+        --shadow: 0 8px 24px -12px rgba(0, 0, 0, .6);
+        color-scheme: dark;
+    }
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+        radial-gradient(1200px 500px at 50% -200px, var(--bg-grad), transparent 70%),
+        var(--bg);
+    color: var(--ink);
+    font-family: var(--font-ui);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+svg {
+    width: 1em;
+    height: 1em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+}
+
+a { color: inherit; }
+
+:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+.page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 16px calc(32px + env(safe-area-inset-bottom));
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+    padding: 48px 0 28px;
     text-align: center;
-    font-size: 0.7em;
+}
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 12px;
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+.eyebrow-icon { font-size: 1.05rem; }
+
+.hero h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 650;
+    font-size: clamp(1.9rem, 6vw, 2.9rem);
+    line-height: 1.1;
+    letter-spacing: -.01em;
+    text-wrap: balance;
+}
+
+/* ---------- Books ---------- */
+
+.books { margin-bottom: 20px; }
+
+.books-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.book {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 44px;
+    padding: 0 14px 0 18px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    transition: border-color .15s ease, background .15s ease;
+    overflow: hidden;
+}
+
+/* cotor de carte */
+.book::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: var(--accent);
+    opacity: .85;
+}
+
+.book:hover {
+    border-color: var(--accent);
+    background: var(--surface-2);
+}
+
+.book-name {
+    flex: 1;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.2;
+}
+
+.book-arrow { font-size: .95rem; color: var(--ink-3); }
+.book:hover .book-arrow { color: var(--accent); }
+
+.book--toc {
+    background: var(--accent);
+    border-color: transparent;
+    color: var(--accent-ink);
+}
+
+.book--toc:hover { background: var(--accent); border-color: transparent; opacity: .92; }
+.book--toc::before { display: none; }
+.book--toc svg,
+.book--toc .book-arrow { color: currentColor; opacity: .9; }
+.book--toc .book-icon { font-size: 1.1rem; }
+
+/* ---------- Toolbar (sticky) ---------- */
+
+.toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    margin: 0 -16px;
+    padding: 12px 16px;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    -webkit-backdrop-filter: saturate(1.4) blur(12px);
+    backdrop-filter: saturate(1.4) blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .2s ease;
+}
+
+.toolbar.is-stuck { border-bottom-color: var(--line); }
+
+.search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 48px;
+    padding: 0 14px;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    box-shadow: var(--shadow-sm);
+    color: var(--ink-3);
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.search:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+}
+
+.search svg { font-size: 1.15rem; }
+
+.search input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 1rem;
+    outline: none;
+}
+
+.search input::placeholder { color: var(--ink-3); }
+.search input::-webkit-search-cancel-button { cursor: pointer; }
+
+.search-kbd {
+    display: none;
+    padding: 1px 7px;
+    border: 1px solid var(--line-strong);
+    border-radius: 6px;
+    font: 500 .75rem var(--font-ui);
+    color: var(--ink-3);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .search-kbd { display: inline-block; }
+    .search:focus-within .search-kbd { display: none; }
+}
+
+/* ---------- Lista de cântări ---------- */
+
+main { padding-top: 8px; }
+
+.list-hint {
+    margin: 4px 2px 10px;
+    font-size: .82rem;
+    color: var(--ink-3);
+}
+
+.list-hint:empty { display: none; }
+
+.list-hint strong { color: var(--ink-2); font-weight: 600; }
+
+.songs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.songs:empty { display: none; }
+
+.song + .song { border-top: 1px solid var(--line); }
+
+.song-row {
+    display: flex;
+    align-items: stretch;
+}
+
+.song-toggle {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+    min-height: 60px;
+    padding: 10px 12px 10px 14px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.song-toggle:hover { background: var(--surface-2); }
+
+.song-num {
+    flex-shrink: 0;
+    width: 42px;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.05rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+    text-align: right;
+}
+
+.song-title {
+    flex: 1;
+    min-width: 0;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.3;
+}
+
+.song-title mark {
+    background: color-mix(in srgb, var(--gold) 30%, transparent);
+    color: inherit;
+    border-radius: 3px;
+    padding: 0 1px;
+}
+
+.song-chevron {
+    font-size: 1.1rem;
+    color: var(--ink-3);
+    transition: transform .2s ease;
+}
+
+.song.is-open .song-chevron { transform: rotate(180deg); }
+
+.song-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows .22s ease;
+}
+
+.song.is-open .song-panel { grid-template-rows: 1fr; }
+
+.song-panel-inner {
+    overflow: hidden;
+}
+
+.parts {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 2px 14px 16px;
+}
+
+.parts::-webkit-scrollbar { display: none; }
+
+/* centrare care nu taie butoanele din stânga dacă rândul e prea lat */
+.parts > :first-child { margin-left: auto; }
+.parts > :last-child { margin-right: auto; }
+
+.part {
+    flex: 0 0 auto;
+    min-width: 112px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 44px;
+    padding: 0 12px;
+    white-space: nowrap;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--ink);
+    font: 500 .9rem var(--font-ui);
+    text-decoration: none;
+    cursor: pointer;
+    transition: border-color .15s ease, background .15s ease, opacity .15s ease;
+}
+
+.part svg { font-size: .95rem; color: var(--ink-3); }
+
+.part:hover { border-color: var(--accent); }
+.part:hover svg { color: var(--accent); }
+
+.part.is-missing {
+    opacity: .45;
+    border-style: dashed;
+    pointer-events: none;
+}
+
+.part.is-missing svg { display: none; }
+
+.part--all {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bg);
+}
+
+.part--all svg { color: currentColor; opacity: .8; }
+.part--all:hover { border-color: var(--ink); opacity: .9; }
+.part--all:hover svg { color: currentColor; }
+
+.part--all[aria-busy="true"] { cursor: progress; opacity: .7; }
+
+.spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- Stări goale / erori ---------- */
+
+.empty,
+.error {
+    padding: 48px 16px;
+    text-align: center;
+    background: var(--surface);
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius);
+}
+
+.empty-title {
+    margin: 0 0 4px;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+}
+
+.empty-sub {
+    margin: 0;
+    font-size: .9rem;
+    color: var(--ink-3);
+}
+
+.footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: .78rem;
+    color: var(--ink-3);
+}
+
+.footer p { margin: 0; }
+
+#last-update {
+    margin-top: 4px;
     font-style: italic;
 }
 
-.container {
-    background: #ffffff; /* Alb simplu */
-    padding: 10px;
-    margin: 10px 0; /* Margini doar pe sus și jos */
-    border-radius: 15px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Umbra mai subtilă */
-    width: 100%;
-    max-width: 800px;
-    box-sizing: border-box;
+#last-update:empty { display: none; }
 
-    /* Aliniază containerul pe orizontală */
-    margin-left: auto;  /* Centrare pe orizontală */
-    margin-right: auto; /* Centrare pe orizontală */
+/* ---------- Toast ---------- */
+
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    z-index: 20;
+    max-width: calc(100% - 32px);
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--bg);
+    font-size: .88rem;
+    box-shadow: var(--shadow);
 }
 
-/* Stiluri pentru header */
-header {
-    text-align: center;
-    margin-bottom: 10px;
+/* ---------- Responsive ---------- */
+
+@media (max-width: 640px) {
+    .hero { padding: 36px 0 22px; }
+
+    .song-num { width: 32px; font-size: 1rem; }
+    .song-toggle { gap: 12px; padding-left: 10px; }
+
+    .parts { padding: 2px 10px 14px; gap: 4px; }
+    .part { min-width: 0; padding: 0 6px; font-size: .78rem; letter-spacing: -.01em; }
+    .part--all { min-width: 52px; }
+    .part svg { display: none; }
+
 }
 
-h1 {
-    font-size: 2.5em;
-    font-weight: 700;
-    margin: 0;
-    padding: 0;
-    font-family: 'Poppins', sans-serif;
+@media (max-width: 370px) {
+    .parts { padding: 2px 8px 12px; gap: 3px; }
+    .part { padding: 0 4px; font-size: .72rem; }
 }
 
-h2
-{
-    font-weight: 500;
-}
-
-/* Stiluri pentru butoane instrumente */
-.instrument-buttons {
-    display: flex;
-    flex-direction: column; /* Aranjează butoanele vertical */
-    align-items: center; /* Centrează butoanele pe axa orizontală */
-    gap: 10px; /* Spațiu între butoane */
-}
-
-.category-title {
-    font-size: 1.0em;
-    margin-left: 10px ;
-}
-
-.instrument-buttons a {
-    text-decoration: none;
-    color: #ffffff;
-    background-color: #00796b; /* Verde-turcoaz închis */
-    font-weight: 500;
-    font-size: 0.7em; /* Dimensiune mai mică pentru text */
-    padding: 8px 12px; /* Padding mai mic */
-    border-radius: 10px; /* Colțuri rotunjite */
-    display: block;
-    text-align: center;
-    width: 100%; /* Asigură că butoanele se întind pe toată lățimea containerului */
-    max-width: 200px; /* Lățime maximă pentru butoane */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Umbra mai subtilă */
-}
-
-/* Stiluri pentru secțiunile de categorie */
-.category {
-    margin-bottom: 10px;
-    border-radius: 10px;
-    overflow: hidden;
-    background: #ffffff; /* Alb simplu */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Umbra subtilă */
-    transition: none; /* Elimină efectele de hover */
-}
-
-.category-header {
-    background: #00796b; /* Verde-turcoaz închis */
-    color: #ffffff;
-    padding: 20px;
-    cursor: pointer;
-    font-size: 0.9em;
-    font-weight: 600;
-    border-bottom: 2px solid #004d40; /* Verde-turcoaz mai închis */
-    position: relative;
-    text-align: center;
-}
-
-.category-content {
-    display: none; /* Ascunde conținutul inițial */
-    padding: 5px;
-    background: #e0f2f1; /* Verde-turcoaz foarte deschis */
-}
-
-.category-content a {
-    text-decoration: none;
-    color: #ffffff;
-    background-color: #00796b; /* Verde-turcoaz închis */
-    font-weight: 500;
-    font-size: 0.7em; /* Mărimea textului ajustată pentru a fi mai mare */
-    padding: 9px 0px; /* Padding mai mic pentru un aspect mai compact */
-    border-radius: 15px; /* Colțuri rotunjite */
-    display: block;
-    text-align: center;
-    width: 100%; /* Asigură că butoanele se întind pe toată lățimea containerului */
-    max-width: 180px; /* Lățime maximă pentru butoane mai mică */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Umbra subtilă */
-    margin: 2px; /* Centrarea butoanelor cu margine automată pe lateral */
-}
-
-
-/* Stiluri pentru butonul de cuprins */
-.pdf-button-container {
-    display: flex; /* Folosește flexbox pentru a alinia butoanele */
-    flex-direction: column; /* Așezarea butoanelor pe verticală */
-    align-items: center; /* Centrarea butoanelor pe axa orizontală */
-    margin: 10px; /* Margine exterioară pentru container */
-    margin-top: 0px;
-}
-
-.pdf-button {
-    all: unset; 
-    text-decoration: none;
-    color: #ffffff;
-    margin: 4px; /* Margine verticală între butoane */
-    background-color: #00796b; /* Portocaliu închis pentru contrast */
-    font-weight: 500;
-    width: 75%;
-    font-size: 0.9em; /* Dimensiune text medie */
-    padding: 10px; /* Padding moderat */
-    border-radius: 15px; /* Colțuri rotunjite */
-    display: inline-block;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Umbra subtilă */
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.search-bar {
-    display: flex;
-    justify-content: center;
-    margin: 10px 0;
-}
-
-#search-input {
-    width: 90%;
-    max-width: 400px;
-    padding: 10px;
-    border: 2px solid #00796b;
-    border-radius: 15px;
-    font-size: 1em;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    outline: none;
-    transition: border-color 0.3s ease;
-}
-
-#search-input:focus {
-    border-color: #004d40;
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        transition-duration: 0s !important;
+        animation-duration: 0s !important;
+    }
 }

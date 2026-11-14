@@ -1,184 +1,286 @@
-document.addEventListener('DOMContentLoaded', async function() {
-    console.log('Script loaded'); // Confirmăm că scriptul a fost încărcat
+(() => {
+    'use strict';
 
-    try {
-        const response = await fetch('resources/config.json');
-        if (!response.ok) {
-            throw new Error('Eroare la încărcarea fișierului JSON');
+    const INSTRUMENTE = [
+        { id: 'mandolina', label: 'Mandolină' },
+        { id: 'vioara1',   label: 'Vioara 1' },
+        { id: 'vioara2',   label: 'Vioara 2' },
+        { id: 'chitara',   label: 'Chitară' },
+    ];
+
+    const ICON_OPEN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+    const ICON_CHEVRON = '<svg class="song-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+    const ICON_STACK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/></svg>';
+
+    const $ = (id) => document.getElementById(id);
+    const els = {
+        list: $('content'),
+        search: $('search-input'),
+        hint: $('list-hint'),
+        empty: $('empty'),
+        error: $('error'),
+        updated: $('last-update'),
+        toast: $('toast'),
+        toolbar: $('toolbar'),
+    };
+
+    let songs = [];
+    const availability = new Map(); // url -> Promise<boolean>
+
+    // ---------- Utilitare ----------
+
+    // Elimină diacriticele, ca „incredere” să găsească „încredere”.
+    function fold(s) {
+        return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    }
+
+    function escapeHtml(s) {
+        return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    function pdfUrl(instrumentId, file) {
+        return `resources/${instrumentId}/${encodeURIComponent(file)}.pdf`;
+    }
+
+    function checkExists(url) {
+        if (!availability.has(url)) {
+            availability.set(url, fetch(url, { method: 'HEAD' })
+                .then(r => r.ok)
+                .catch(() => true)); // offline / blocat: nu ascundem nimic
         }
-        const data = await response.json();
-        console.log('JSON data:', data);
+        return availability.get(url);
+    }
 
-        const content = document.getElementById('content');
-        const instrumente = ['Mandolina', 'Vioara 1', 'Vioara 2', 'Chitara'];
+    let toastTimer;
+    function toast(msg) {
+        els.toast.textContent = msg;
+        els.toast.hidden = false;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => { els.toast.hidden = true; }, 3200);
+    }
 
-        // Adăugăm secțiuni pentru fiecare cântare
-        data.cantari.forEach(cantare => {
-            const section = document.createElement('section');
-            section.classList.add('category');
+    function parseSong(raw) {
+        const m = raw.match(/^\s*(\d+)\.\s*(.*)$/);
+        const num = m ? m[1] : '';
+        const title = m ? m[2] : raw;
+        return { file: raw, num, title, key: fold(title), el: null };
+    }
 
-            const title = document.createElement('h2');
-            title.classList.add('category-title');
-            title.textContent = cantare;
+    // ---------- Lista ----------
 
-            const list = document.createElement('div');
-            list.classList.add('category-content');
+    function renderList() {
+        els.list.innerHTML = '';
+        const frag = document.createDocumentFragment();
+        songs.forEach(s => {
+            s.el = buildSong(s);
+            frag.appendChild(s.el);
+        });
+        els.list.appendChild(frag);
+        applyFilter();
+    }
 
-            const mergeLink = document.createElement('a');
-            mergeLink.textContent = "All";
-            mergeLink.href = '#';
-            mergeLink.classList.add('merge-link');
+    function buildSong(song) {
+        const li = document.createElement('li');
+        li.className = 'song';
+        const panelId = `song-panel-${song.num || fold(song.title).replace(/\W+/g, '-')}`;
 
-            // Adăugăm linkuri pentru fiecare instrument
-            instrumente.forEach(instrument => {
-                const folder = instrument.toLowerCase().replace(' ', '');
-                const link = document.createElement('a');
-                link.href = `resources/${folder}/${cantare}.pdf`;
-                link.target = '_blank';
-                link.textContent = instrument;
-                list.appendChild(link);
+        const row = document.createElement('div');
+        row.className = 'song-row';
+
+        const toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'song-toggle';
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-controls', panelId);
+        toggle.innerHTML = `
+            <span class="song-num">${escapeHtml(song.num)}</span>
+            <span class="song-title"></span>
+            ${ICON_CHEVRON}`;
+        row.appendChild(toggle);
+
+        const panel = document.createElement('div');
+        panel.className = 'song-panel';
+        panel.id = panelId;
+        panel.innerHTML = '<div class="song-panel-inner"><div class="parts"></div></div>';
+        const parts = panel.querySelector('.parts');
+        panel.inert = true;
+
+        let built = false;
+        toggle.addEventListener('click', () => {
+            const open = !li.classList.contains('is-open');
+            li.classList.toggle('is-open', open);
+            toggle.setAttribute('aria-expanded', String(open));
+            panel.inert = !open;
+            if (open && !built) {
+                built = true;
+                buildParts(song, parts);
+            }
+        });
+
+        li.append(row, panel);
+        return li;
+    }
+
+    function buildParts(song, container) {
+        INSTRUMENTE.forEach(inst => {
+            const url = pdfUrl(inst.id, song.file);
+            const a = document.createElement('a');
+            a.className = 'part';
+            a.href = url;
+            a.target = '_blank';
+            a.rel = 'noopener';
+            a.innerHTML = `<span>${escapeHtml(inst.label)}</span>${ICON_OPEN}`;
+            container.appendChild(a);
+            checkExists(url).then(ok => {
+                if (!ok) {
+                    a.classList.add('is-missing');
+                    a.removeAttribute('href');
+                    a.setAttribute('aria-disabled', 'true');
+                    a.title = 'Partitura nu este disponibilă';
+                }
             });
+        });
 
-            section.appendChild(title);
-            section.appendChild(list);
-            content.appendChild(section);
+        const all = document.createElement('button');
+        all.type = 'button';
+        all.className = 'part part--all';
+        all.innerHTML = `<span>All</span>${ICON_STACK}`;
+        all.addEventListener('click', () => mergeSong(song, all));
+        container.appendChild(all);
+    }
 
-            list.appendChild(mergeLink);
+    // ---------- Combinare PDF ----------
 
-            // Funcționalitatea de combinare PDF
-            mergeLink.addEventListener('click', async function(e) {
+    async function mergeSong(song, btn) {
+        if (btn.getAttribute('aria-busy') === 'true') return;
+        if (!window.PDFLib) { toast('Biblioteca PDF nu s-a încărcat. Verifică conexiunea.'); return; }
+
+        // Deschidem fereastra imediat (în gestul utilizatorului) ca să nu fie blocată de browser.
+        const win = window.open('', '_blank');
+        const original = btn.innerHTML;
+        btn.setAttribute('aria-busy', 'true');
+        btn.innerHTML = '<span>Se pregătește…</span><span class="spinner" aria-hidden="true"></span>';
+
+        try {
+            const merged = await PDFLib.PDFDocument.create();
+            merged.setTitle(song.file);
+
+            const docs = await Promise.all(INSTRUMENTE.map(async inst => {
+                try {
+                    const r = await fetch(pdfUrl(inst.id, song.file));
+                    if (!r.ok) return null;
+                    return await PDFLib.PDFDocument.load(await r.arrayBuffer());
+                } catch (e) {
+                    console.warn(`Nu s-a putut încărca ${inst.label}:`, e);
+                    return null;
+                }
+            }));
+
+            let added = 0;
+            for (const doc of docs) { // păstrăm ordinea instrumentelor
+                if (!doc) continue;
+                const pages = await merged.copyPages(doc, doc.getPageIndices());
+                pages.forEach(p => merged.addPage(p));
+                added++;
+            }
+
+            if (!added) {
+                win && win.close();
+                toast('Nu există partituri pentru această cântare.');
+                return;
+            }
+
+            const blob = new Blob([await merged.save()], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            if (win && !win.closed) win.location.href = url;
+            else window.location.href = url;
+            if (added < INSTRUMENTE.length) toast(`${added} din ${INSTRUMENTE.length} partide disponibile.`);
+        } catch (e) {
+            console.error(e);
+            win && win.close();
+            toast('A apărut o eroare la combinarea PDF-urilor.');
+        } finally {
+            btn.removeAttribute('aria-busy');
+            btn.innerHTML = original;
+        }
+    }
+
+    // ---------- Căutare ----------
+
+    function applyFilter() {
+        const raw = els.search.value.trim();
+        const q = fold(raw);
+        const numQuery = /^\d+$/.test(raw);
+        let visible = 0;
+
+        songs.forEach(s => {
+            let match = !q;
+            if (!match) {
+                match = numQuery ? s.num.startsWith(raw) : s.key.includes(q) || s.num === raw;
+            }
+            s.el.hidden = !match;
+            if (match) visible++;
+            highlight(s, numQuery ? '' : q);
+        });
+
+        els.empty.hidden = visible !== 0 || !songs.length;
+        els.list.hidden = visible === 0;
+
+        els.hint.innerHTML = q
+            ? `<strong>${visible}</strong> ${visible === 1 ? 'rezultat' : 'rezultate'}`
+            : '';
+    }
+
+    function highlight(song, q) {
+        const span = song.el.querySelector('.song-title');
+        if (!q) { span.textContent = song.title; return; }
+        const i = song.key.indexOf(q);
+        if (i < 0) { span.textContent = song.title; return; }
+        // fold() păstrează lungimea pentru literele românești precompuse după NFD+strip,
+        // dar verificăm pentru siguranță.
+        if (fold(song.title).length !== song.title.normalize('NFC').length) { span.textContent = song.title; return; }
+        const t = song.title.normalize('NFC');
+        span.innerHTML = escapeHtml(t.slice(0, i)) + '<mark>' + escapeHtml(t.slice(i, i + q.length)) + '</mark>' + escapeHtml(t.slice(i + q.length));
+    }
+
+    // ---------- Init ----------
+
+    async function init() {
+        try { localStorage.removeItem('obpp.instrument'); } catch { /* ignorat */ }
+
+        els.search.addEventListener('input', applyFilter);
+        els.search.addEventListener('keydown', e => {
+            if (e.key === 'Escape') { els.search.value = ''; applyFilter(); els.search.blur(); }
+            if (e.key === 'Enter') {
+                const first = songs.find(s => !s.el.hidden);
+                if (first) first.el.querySelector('.song-toggle').click();
+            }
+        });
+        document.addEventListener('keydown', e => {
+            if (e.key === '/' && document.activeElement !== els.search && !e.metaKey && !e.ctrlKey) {
                 e.preventDefault();
-
-                const mergedPdf = await PDFLib.PDFDocument.create();
-                mergedPdf.setTitle(cantare);
-
-                // Creăm un array de Promises pentru fiecare instrument
-                const pdfPromises = instrumente.map(instrument => {
-                    const folder = instrument.toLowerCase().replace(' ', '');
-                    const pdfUrl = `resources/${folder}/${cantare}.pdf`;
-
-                    return fetch(pdfUrl)
-                        .then(response => {
-                            if (!response.ok) {
-                                console.warn(`Fișierul nu a fost găsit la: ${pdfUrl}`);
-                                return null;
-                            }
-                            return response.arrayBuffer();
-                        })
-                        .then(pdfBytes => {
-                            if (pdfBytes) {
-                                return PDFLib.PDFDocument.load(pdfBytes);
-                            }
-                        })
-                        .then(pdfDoc => {
-                            if (pdfDoc) {
-                                return mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
-                            }
-                        })
-                        .then(copiedPages => {
-                            if (copiedPages) {
-                                copiedPages.forEach(page => mergedPdf.addPage(page));
-                            }
-                        })
-                        .catch(error => console.error(`Eroare la procesarea fișierului PDF: ${error}`));
-                });
-
-                // Așteptăm toate Promises
-                await Promise.all(pdfPromises);
-
-                // Salvăm și deschidem PDF-ul combinat
-                const mergedPdfBytes = await mergedPdf.save();
-                const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
-                const blobUrl = URL.createObjectURL(blob);
-                window.open(blobUrl);  // Deschide PDF-ul combinat într-o fereastră nouă
-            });
-
-            // Toggle pentru a afișa/ascunde lista de instrumente
-            title.addEventListener('click', function() {
-                list.style.display = list.style.display === 'flex' ? 'none' : 'flex';
-            });
+                els.search.focus();
+            }
         });
 
-        // Actualizare text pentru data ultimei modificări
-        const contentLastUpdate = document.getElementById('last-update');
-        contentLastUpdate.textContent = "Updated " + data.lastUpdate;
-    } catch (error) {
-        console.error('Eroare la procesarea fișierului JSON:', error);
-    }
-});
+        // Bordură subtilă când bara de căutare devine „lipită” sus.
+        const sentinel = document.createElement('div');
+        els.toolbar.before(sentinel);
+        new IntersectionObserver(([en]) => els.toolbar.classList.toggle('is-stuck', !en.isIntersecting))
+            .observe(sentinel);
 
-// Funcția pentru a căuta cântările
-function filtrareCantari() {
-    const searchTerm = document.getElementById('search-input').value.toLowerCase();
-    const categories = document.querySelectorAll('.category');
-
-    categories.forEach(category => {
-        const title = category.querySelector('.category-title').textContent.toLowerCase();
-
-        if (title.includes(searchTerm)) {
-            category.style.display = 'block';
-        } else {
-            category.style.display = 'none';
+        try {
+            const r = await fetch('resources/config.json', { cache: 'no-cache' });
+            if (!r.ok) throw new Error(`HTTP ${r.status}`);
+            const data = await r.json();
+            songs = (data.cantari || []).map(parseSong);
+            els.updated.textContent = data.lastUpdate ? `Actualizat la ${data.lastUpdate}` : '';
+            renderList();
+        } catch (e) {
+            console.error('Eroare la încărcarea config.json:', e);
+            els.error.hidden = false;
         }
-    });
-}
-
-// Funcția pentru generarea dosarului complet pentru o listă de instrumente
-async function generareDosarComplet(instrumente) {
-    const mergedPdf = await PDFLib.PDFDocument.create();
-    mergedPdf.setTitle(`Dosar complet - Orchestra Bisericii Penticostale Plopeni`);
-
-    try {
-        const response = await fetch('resources/config.json');
-        if (!response.ok) {
-            throw new Error('Eroare la încărcarea fișierului JSON');
-        }
-
-        const data = await response.json();
-
-        // Generăm promisiuni pentru fiecare cântare
-        const pdfPromises = data.cantari.map(cantare => {
-            // Pentru fiecare instrument din lista primită ca parametru
-            return instrumente.map(instrument => {
-                const folder = instrument.toLowerCase().replace(' ', '');
-                const pdfUrl = `resources/${folder}/${cantare}.pdf`;
-
-                return fetch(pdfUrl)
-                    .then(response => {
-                        if (!response.ok) {
-                            console.warn(`Fișierul nu a fost găsit la: ${pdfUrl}`);
-                            return null;
-                        }
-                        return response.arrayBuffer();
-                    })
-                    .then(pdfBytes => {
-                        if (pdfBytes) {
-                            return PDFLib.PDFDocument.load(pdfBytes);
-                        }
-                    })
-                    .then(pdfDoc => {
-                        if (pdfDoc) {
-                            return mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
-                        }
-                    })
-                    .then(copiedPages => {
-                        if (copiedPages) {
-                            copiedPages.forEach(page => mergedPdf.addPage(page));
-                        }
-                    })
-                    .catch(error => console.error(`Eroare la procesarea fișierului PDF: ${error}`));
-            });
-        });
-
-        // Așteptăm toate promisiunile
-        await Promise.all(pdfPromises.flat());
-
-        // Salvăm și deschidem PDF-ul generat
-        const mergedPdfBytes = await mergedPdf.save();
-        const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
-        const blobUrl = URL.createObjectURL(blob);
-        window.open(blobUrl);
-    } catch (error) {
-        console.error('Eroare la încărcarea fișierului JSON:', error);
     }
-}
+
+    init();
+})();

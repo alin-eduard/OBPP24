@@ -1,1 +1,1 @@
-python -m http.server 3333
+python3 -m http.server 3333
